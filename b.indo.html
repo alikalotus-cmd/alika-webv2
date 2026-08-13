@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('alika_theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+  <title>Bahasa Indonesia Search | Alika</title>
+  <meta name="description"
+    content="Halaman khusus penelusuran tugas Bahasa Indonesia, esai sastra, resensi buku, dan artikel kebahasaan kelas XI buatan Alika.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            tech: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              pinkBg: 'rgb(243 236 247)',
+              darkBg: 'rgb(243 236 247)',
+              pinkAccent: '#f472b6',
+              softPink: '#fce7f3',
+              deepPink: '#eecedb'
+            },
+            pastel: {
+              pink: {
+                bg: 'var(--pastel-pink-bg)',
+                border: 'var(--pastel-pink-border)',
+                accent: 'var(--pastel-pink-accent)',
+                light: 'var(--pastel-pink-light)'
+              },
+              purple: {
+                bg: 'var(--pastel-purple-bg)',
+                border: 'var(--pastel-purple-border)',
+                accent: 'var(--pastel-purple-accent)',
+                light: 'var(--pastel-purple-light)'
+              },
+              blue: {
+                bg: 'var(--pastel-blue-bg)',
+                border: 'var(--pastel-blue-border)',
+                accent: 'var(--pastel-blue-accent)',
+                light: 'var(--pastel-blue-light)'
+              },
+              mint: {
+                bg: 'var(--pastel-mint-bg)',
+                border: 'var(--pastel-mint-border)',
+                accent: 'var(--pastel-mint-accent)',
+                light: 'var(--pastel-mint-light)'
+              },
+              peach: {
+                bg: 'var(--pastel-peach-bg)',
+                border: 'var(--pastel-peach-border)',
+                accent: 'var(--pastel-peach-accent)',
+                light: 'var(--pastel-peach-light)'
+              }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+
+
+    /* Pastel Theme Google Colors (matching the dashboard's soft accents) */
+    .p-pink { color: var(--pastel-pink-accent); }
+    .p-purple { color: var(--pastel-purple-accent); }
+    .p-blue { color: var(--pastel-blue-accent); }
+    .p-peach { color: var(--pastel-peach-accent); }
+
+    /* Modal content slide-up animation with cubic bezier */
+    @keyframes modalSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-modal-slide {
+      animation: modalSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    
+    /* Premium Drop Cap for Serif Text inside Modals */
+    .drop-cap-premium::first-letter {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 3.8rem;
+      font-weight: 900;
+      float: left;
+      line-height: 0.75;
+      margin-right: 0.65rem;
+      margin-top: 0.15rem;
+      background: linear-gradient(135deg, #ec4899, #a855f7, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-brand-pinkBg dark:bg-brand-darkBg text-zinc-800 dark:text-zinc-100 min-h-screen flex flex-col selection:bg-pink-200 selection:text-pink-900 dark:selection:bg-pink-900/50 dark:selection:text-pink-100 transition-colors duration-300">
+
+  <!-- Background Decorative Grid & Animating Glow Blobs -->
+  <div class="fixed inset-0 bg-grid-pattern pointer-events-none opacity-[0.35] z-0"></div>
+  <div
+    class="fixed top-[5%] right-[-5%] w-[450px] h-[450px] bg-pink-300/30 dark:bg-pink-900/10 rounded-full floating-blob blur-[100px]">
+  </div>
+  <div
+    class="fixed bottom-[10%] left-[-5%] w-[500px] h-[500px] bg-purple-300/30 dark:bg-purple-900/10 rounded-full floating-blob animation-delay-2000 blur-[100px]">
+  </div>
+  <div
+    class="fixed top-[40%] left-[30%] w-[350px] h-[350px] bg-sky-200/25 dark:bg-sky-950/10 rounded-full floating-blob animation-delay-4000 blur-[100px]">
+  </div>
+
+  <!-- HEADER / NAVIGATION -->
+  <header
+    class="sticky top-0 z-40 glass-nav border-b border-purple-100 dark:border-purple-950/60 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+
+      <!-- Brand Logo (Sastra Theme) -->
+      <a href="index.html#dashboard" class="flex items-center gap-3 group cursor-pointer">
+        <div
+          class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-500 text-white flex items-center justify-center shadow-md shadow-purple-500/20 transition-transform group-hover:scale-105">
+          <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div>
+          <span class="font-extrabold text-lg tracking-tight text-zinc-900 dark:text-white">ALIKA<span
+              class="text-purple-600 dark:text-purple-400 font-normal">.SASTRA</span></span>
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+            <span class="text-[10px] uppercase font-mono tracking-widest text-purple-600 dark:text-purple-400">Sastra & Bahasa XI</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav
+        class="hidden lg:flex items-center gap-2 bg-white/70 dark:bg-zinc-900/70 p-1.5 rounded-2xl border border-purple-100/80 dark:border-purple-900/40 shadow-sm">
+        <a href="index.html#dashboard"
+          class="nav-link px-3.5 xl:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-purple-600 dark:hover:text-purple-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="index.html#profil"
+          class="nav-link px-3.5 xl:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-purple-600 dark:hover:text-purple-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span>Profil</span>
+        </a>
+        <a href="informatika.html"
+          class="nav-link px-3.5 xl:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-purple-600 dark:hover:text-purple-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          </svg>
+          <span>Informatika</span>
+        </a>
+        <a href="b.indo.html"
+          class="nav-link active px-3.5 xl:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span>Bahasa Indonesia</span>
+        </a>
+      </nav>
+
+      <!-- Right Controls: Theme Switcher & Back button -->
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggleBtn" title="Ganti Tema Mode"
+          class="p-2.5 rounded-xl border border-purple-200/70 dark:border-purple-900/50 bg-white/80 dark:bg-zinc-900 text-purple-600 dark:text-purple-300 hover:border-purple-400 transition-all shadow-sm cursor-pointer">
+          <!-- Sun Icon for Dark Mode -->
+          <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <!-- Moon Icon for Light Mode -->
+          <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <a href="index.html"
+          class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 hover:opacity-90 text-white text-xs font-bold shadow-md shadow-purple-500/10 hover:shadow-purple-500/20 transition-all">
+          Kembali ke Portofolio
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn"
+          class="lg:hidden p-2.5 rounded-xl border border-purple-200/70 dark:border-purple-900/50 bg-white dark:bg-zinc-900 text-purple-600 dark:text-purple-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileNav"
+      class="hidden lg:hidden border-b border-purple-100 dark:border-purple-950 bg-white/95 dark:bg-zinc-950 px-4 py-4 space-y-2">
+      <a href="index.html#dashboard"
+        class="nav-link block px-4 py-2 rounded-xl text-sm font-semibold text-zinc-600 dark:text-zinc-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-zinc-900/50 transition-all">
+        Dashboard
+      </a>
+      <a href="index.html#profil"
+        class="nav-link block px-4 py-2 rounded-xl text-sm font-semibold text-zinc-600 dark:text-zinc-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-zinc-900/50 transition-all">
+        Profil
+      </a>
+      <a href="informatika.html"
+        class="nav-link block px-4 py-2 rounded-xl text-sm font-semibold text-zinc-600 dark:text-zinc-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-zinc-900/50 transition-all">
+        Informatika
+      </a>
+      <a href="b.indo.html"
+        class="nav-link active block px-4 py-2 rounded-xl text-sm font-semibold text-purple-600 dark:text-purple-400 bg-purple-500/10 dark:bg-purple-500/20">
+        Bahasa Indonesia
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER: GOOGLE ENGINE LAYOUT -->
+  <main class="flex-1 flex flex-col justify-start relative z-10 w-full pt-8">
+
+    <!-- MAIN SASTRA EDITORIAL AND CARDS SECTION (Visible by default) -->
+    <div id="mainSastraSection" class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-12">
+      
+      <!-- Section Title & Info Banner -->
+      <!-- Premium Full-Bleed Hero Banner Section with Image Background -->
+      <div
+        class="relative overflow-hidden rounded-3xl border border-purple-200/40 dark:border-purple-900/35 shadow-xl min-h-[340px] sm:min-h-[380px] flex items-center p-6 sm:p-8 md:p-10 group">
+        
+        <!-- Background Image (Original colors, no color effect overlay) -->
+        <div class="absolute inset-0 z-0">
+          <img src="assets/sastra_hero.png" alt="Sastra Background" 
+            class="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-[2000ms] ease-out" />
+        </div>
+
+        <!-- Glassmorphic Text Card (Horizontal Split Layout, Light Frosted Glass Style) -->
+        <div class="relative z-10 w-full max-w-5xl bg-white/20 dark:bg-zinc-900/25 backdrop-blur-xl p-6 sm:p-8 md:p-10 rounded-3xl border border-white/30 dark:border-zinc-800/35 shadow-2xl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-center">
+            
+            <!-- Left Column: Branding, Title & Tag -->
+            <div class="space-y-4">
+              <!-- Literary Tag -->
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-purple-100/70 dark:bg-purple-950/60 border border-purple-300/40 dark:border-purple-800/40 font-serif italic text-xs text-purple-900 dark:text-purple-200 font-semibold">
+                <span>“Utamakan Bahasa Negara, Lestarikan Bahasa Daerah”</span>
+              </div>
+
+              <!-- Title Typography -->
+              <div class="space-y-2">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-white font-serif leading-tight">
+                  Ruang Sastra & <br>
+                  <span class="italic font-normal bg-gradient-to-r from-purple-600 via-pink-600 to-rose-500 bg-clip-text text-transparent font-serif font-serif">Bahasa Indonesia</span>
+                </h1>
+                <p class="text-xs font-mono text-purple-900 dark:text-purple-300 font-bold">
+                  &lt;literatur&gt; // Merangkai pemikiran, menenun makna &lt;/literatur&gt;
+                </p>
+              </div>
+            </div>
+
+            <!-- Right Column: Description & Quote (Separated by subtle border) -->
+            <div class="space-y-5 md:border-l md:border-zinc-300/40 md:dark:border-zinc-800/40 md:pl-8 lg:pl-10">
+              <p class="text-xs sm:text-sm text-zinc-800 dark:text-zinc-300 leading-relaxed font-sans font-medium">
+                Selamat datang di repositori karya tulis Alika. Di sini dikumpulkan analisis teks eksposisi, laporan hasil observasi ilmiah (LHO), teks anekdot kritis, ulasan karya sastra klasik nusantara, serta kajian sastra digital.
+              </p>
+
+              <!-- Quote Section -->
+              <div class="border-l-4 border-purple-500 pl-4 py-1 italic text-[11px] text-zinc-700 dark:text-zinc-400 font-serif leading-relaxed">
+                “Tahu kau mengapa aku sayangi kau lebih dari siapapun? Karena kau menulis. Suaramu takkan padam ditiup angin, akan abadi sampai jauh, jauh di kemudian hari.”
+                <span class="block text-[9px] font-bold tracking-wider text-purple-900 dark:text-purple-300 font-sans uppercase mt-1.5">— Pramoedya Ananta Toer</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+           <!-- Section: Ruang Sastra & Opini Bahasa -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-purple-200/50 dark:border-purple-950/40 space-y-6">
+        <!-- Editorial Header -->
+        <div class="text-center py-4 border-b-2 border-double border-purple-300 dark:border-purple-900/60 mb-6">
+          <span class="font-serif italic text-xs text-purple-500 uppercase block mb-1">❖ Swara Sastra Nusantara ❖</span>
+          <h3 class="text-2xl sm:text-3xl font-extrabold tracking-wide font-serif">
+            <span class="bg-gradient-to-r from-purple-600 via-pink-500 to-rose-500 bg-clip-text text-transparent">KARYA TULIS & ARSIP BAHASA</span>
+          </h3>
+          <span
+            class="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 block mt-1 font-mono tracking-widest uppercase">Edisi
+            Juli 2026 • LHO, Anekdot, & Biografi</span>
+        </div>
+         <!-- Editorial Layout Container -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Left Area: Main Journal -->
+          <div
+            class="lg:col-span-2 space-y-8 lg:border-r lg:border-dashed lg:border-purple-200/50 lg:dark:border-purple-900/30 lg:pr-8">
+            
+            <!-- Article 1: Blueberry LHO -->
+            <article class="group bg-white/30 dark:bg-zinc-900/30 p-6 rounded-3xl border border-purple-100/40 dark:border-zinc-800/40 hover:border-purple-300 dark:hover:border-purple-700/50 hover:shadow-xl hover:shadow-purple-300/5 dark:hover:shadow-purple-900/5 transition-all duration-500 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950/40 text-[10px] font-mono text-blue-700 dark:text-blue-300 font-bold border border-blue-200 dark:border-blue-900/30">TEKS LHO</span>
+                  </div>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500 font-mono">30 Juli 2026</span>
+                </div>
+                
+                <!-- Featured Image with Hover Animation -->
+                <div class="mb-5 rounded-2xl overflow-hidden h-64 relative border border-purple-200/30 dark:border-purple-900/20 shadow-sm">
+                  <img src="assets/blueberry.png" alt="Blueberry LHO" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                  <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
+                </div>
+
+                <h4
+                  class="text-2xl sm:text-3xl font-extrabold text-zinc-950 dark:text-white font-serif leading-tight mb-3 italic hover:text-pink-500 dark:hover:text-pink-400 transition-colors cursor-pointer"
+                  onclick="openArticleModal('artikel-1')">
+                  Mengamati Keajaiban si Kecil Biru: Laporan Hasil Observasi Buah Blueberry
+                </h4>
+                
+                <div
+                  class="flex items-center gap-2.5 text-xs text-zinc-500 dark:text-zinc-400 font-mono mb-4 border-b border-purple-100/50 dark:border-purple-950/40 pb-2">
+                  <span>Penulis: Alika Lotus Apriyanto</span>
+                  <span>•</span>
+                  <span>4 Menit Baca</span>
+                </div>
+
+                <!-- Multi-column text body (Serif Style) -->
+                <div
+                  class="newspaper-cols-2 text-sm text-zinc-650 dark:text-zinc-400 font-serif leading-relaxed text-justify mb-4">
+                  <p class="drop-cap-serif-classic mb-4">
+                    Buah blueberry adalah buah kecil berwarna biru keunguan yang berasal dari tanaman berbunga genus Vaccinium. Buah ini tumbuh subur di daerah beriklim sedang, seperti Amerika Utara, Eropa, dan beberapa wilayah di Asia. Blueberry terkenal karena perpaduan rasa manis-asamnya yang menyegarkan serta kandungan gizinya yang sangat tinggi, sehingga buah ini banyak dikonsumsi segar maupun diolah menjadi muffin, pai, smoothies, dan selai.
+                  </p>
+
+                  <div class="avoid-break my-4">
+                    <div class="pull-quote-ornament">
+                      “Blueberry memiliki kandungan antosianin dan vitamin C yang andal menangkal radikal bebas dan memelihara daya ingat.”
+                    </div>
+                    <p class="mb-4">
+                      Kandungan serat alami yang tinggi serta melimpahnya antioksidan bermanfaat besar bagi kesehatan jantung, kelancaran sistem pencernaan, peningkatan kekebalan tubuh, dan merawat kecantikan kulit. Blueberry adalah contoh nyata buah lezat nan berkhasiat tinggi untuk konsumsi harian.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Button Area -->
+              <div class="mt-4 pt-4 border-t border-purple-100/40 dark:border-zinc-800/40 flex justify-start">
+                <button onclick="openArticleModal('artikel-1')" 
+                  class="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 active:scale-95 shadow-md shadow-pink-500/20 hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-0.5 transition-all duration-300 group overflow-hidden">
+                  <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></span>
+                  <span>Baca Selengkapnya</span>
+                  <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </button>
+              </div>
+            </article>
+
+            <!-- Double horizontal line divider -->
+            <div class="border-t-2 border-double border-purple-200 dark:border-purple-900/40 my-6"></div>
+
+            <!-- Article 2: Teks Anekdot -->
+            <article class="group bg-white/30 dark:bg-zinc-900/30 p-6 rounded-3xl border border-purple-100/40 dark:border-zinc-800/40 hover:border-purple-300 dark:hover:border-purple-700/50 hover:shadow-xl hover:shadow-purple-300/5 dark:hover:shadow-purple-900/5 transition-all duration-500 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-4">
+                  <span
+                    class="px-2 py-0.5 rounded bg-pink-100 dark:bg-pink-950/40 text-[10px] font-mono text-pink-700 dark:text-pink-400 font-bold border border-pink-200 dark:border-pink-900/30">TEKS ANEKDOT</span>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500 font-mono">30 Juli 2026</span>
+                </div>
+                
+                <!-- Featured Image with Hover Animation -->
+                <div class="mb-5 rounded-2xl overflow-hidden h-48 relative border border-purple-200/30 dark:border-purple-900/20 shadow-sm">
+                  <img src="assets/anekdot.jpg" alt="HTS Anekdot" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                  <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
+                </div>
+
+                <h4
+                  class="text-xl sm:text-2xl font-extrabold text-zinc-950 dark:text-white font-serif leading-tight mb-3 italic hover:text-pink-500 dark:hover:text-pink-400 transition-colors cursor-pointer"
+                  onclick="openArticleModal('artikel-2')">
+                  HTS (Hubungan Tanpa Status): PDKT yang Terlalu Cepat Baper
+                </h4>
+                
+                <div
+                  class="flex items-center gap-2.5 text-xs text-zinc-500 dark:text-zinc-400 font-mono mb-4 border-b border-purple-100/50 dark:border-purple-950/40 pb-2">
+                  <span>Penulis: Alika Lotus Apriyanto</span>
+                  <span>•</span>
+                  <span>4 Menit Baca</span>
+                </div>
+
+                <p class="text-sm text-zinc-650 dark:text-zinc-400 editorial-text font-serif leading-relaxed text-justify mb-4">
+                  Mengisahkan percakapan lucu antara Leon dan Hana selama masa pendekatan (PDKT). Leon yang posesif menuntut balasan pesan cepat dan selalu drama ketakutan kehilangan padahal belum berstatus pacaran. Hana menghadapinya secara logis dengan candaan tajam yang menyindir Leon. Cerita ini menyampaikan kritik sosial jenaka bahwa PDKT yang sehat memerlukan ruang pribadi dan privasi agar tidak menjenuhkan.
+                </p>
+              </div>
+              
+              <!-- Buttons -->
+              <div class="mt-4 pt-4 border-t border-purple-100/40 dark:border-zinc-800/40 flex flex-wrap gap-3 justify-start">
+                <button onclick="openArticleModal('artikel-2')" 
+                  class="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 active:scale-95 shadow-md shadow-pink-500/20 hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-0.5 transition-all duration-300 group overflow-hidden">
+                  <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></span>
+                  <span>Baca Selengkapnya</span>
+                  <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </button>
+                <a href="https://drive.google.com/file/d/1eStJqVhl3xqQ7C-VDcmRJZ_uXGv7lJs-/view" target="_blank" 
+                  class="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold text-pink-700 bg-pink-50 dark:bg-zinc-850 dark:text-pink-300 hover:bg-pink-100 dark:hover:bg-zinc-800 active:scale-95 border border-pink-200/50 dark:border-pink-850 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group overflow-hidden">
+                  <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></span>
+                  <svg class="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.012 2.25c-.187 0-.374.053-.538.16l-7.75 5.093c-.309.203-.462.535-.462.87v10.187c0 .335.153.667.462.87l7.75 5.093c.164.107.351.16.538.16s.374-.053.538-.16l7.75-5.093c.309-.203.462-.535.462-.87V8.373c0-.335-.153-.667-.462-.87l-7.75-5.093c-.164-.107-.351-.16-.538-.16zm0 2.25l6.75 4.437v8.875l-6.75 4.438-6.75-4.438V8.937L12.012 4.5z"/>
+                  </svg>
+                  <span>Buka PDF di Drive</span>
+                </a>
+              </div>
+            </article>
+          </div>
+
+          <!-- Right Area: Biografi -->
+          <div class="space-y-6">
+            <article class="group bg-gradient-to-br from-purple-50/40 to-pink-50/30 dark:from-purple-950/10 dark:to-zinc-900/40 p-6 rounded-3xl border border-purple-200/40 dark:border-purple-900/30 hover:border-purple-400 dark:hover:border-purple-700/50 hover:shadow-xl hover:shadow-purple-300/5 dark:hover:shadow-purple-900/5 transition-all duration-500 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-4">
+                  <span
+                    class="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950/40 text-[10px] font-mono text-purple-700 dark:text-purple-300 font-bold border border-purple-200 dark:border-purple-900/30">TEKS BIOGRAFI</span>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500 font-mono">30 Juli 2026</span>
+                </div>
+
+                <!-- Profile Image with Hover Animation -->
+                <div class="mb-5 rounded-2xl overflow-hidden h-48 relative border border-purple-200/30 dark:border-purple-900/20 shadow-sm">
+                  <img src="assets/laskar_pelangi.png" alt="Laskar Pelangi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                  <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
+                </div>
+
+                <h4 class="text-xl font-bold text-zinc-950 dark:text-white font-serif leading-tight mb-3 hover:text-pink-500 dark:hover:text-pink-400 transition-colors cursor-pointer group-hover:text-pink-500 dark:group-hover:text-pink-400"
+                  onclick="openArticleModal('artikel-3')">
+                  Biografi Andrea Hirata: Penulis Laskar Pelangi
+                </h4>
+
+                <p class="text-xs text-zinc-650 dark:text-zinc-400 leading-relaxed font-sans text-justify mb-3">
+                  Lahir di Belitung Timur pada 24 Oktober 1967, Andrea Hirata tumbuh dalam keluarga sederhana di lingkungan tambang timah.
+                </p>
+
+                <div class="pull-quote my-3">
+                  “Bermimpilah, karena Tuhan akan memeluk mimpi-mimpimu.”
+                </div>
+
+                <p class="text-xs text-zinc-500 dark:text-zinc-450 leading-relaxed font-sans text-justify">
+                  Meraih gelar Sarjana Ekonomi UI dan Master Ekonomi Telekomunikasi di Sorbonne Prancis dengan cum laude. Ia merevolusi sastra melalui novel debutnya, Laskar Pelangi, yang sukses secara global.
+                </p>
+              </div>
+              
+              <div class="mt-4 pt-4 border-t border-purple-100/40 dark:border-zinc-800/40">
+                <button onclick="openArticleModal('artikel-3')" 
+                  class="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 active:scale-95 shadow-md shadow-pink-500/20 hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-0.5 transition-all duration-300 group overflow-hidden">
+                  <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></span>
+                  <span>Baca Selengkapnya</span>
+                  <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </button>
+              </div>
+            </article>
+
+            <!-- Classic Literary Ornament Card -->
+            <div
+              class="p-5 rounded-2xl border border-purple-100/50 dark:border-zinc-800 bg-purple-50/20 dark:bg-zinc-900/30 text-center font-serif shadow-sm">
+              <span class="text-purple-400 dark:text-purple-300 text-lg block mb-1">❦</span>
+              <p class="text-xs italic text-zinc-550 dark:text-zinc-400">
+                "Dengan menulis, kau merekam sejarah dan membisikkan kebenaran kepada masa depan."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-purple-100 dark:border-purple-950 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-4 rounded-full bg-purple-500"></span>
+          <h3 class="text-sm font-bold text-zinc-800 dark:text-zinc-200">Daftar Karya & Analisis</h3>
+        </div>
+      </div>
+
+      <!-- Indonesian Language Cards Grid -->
+      <div id="bindoGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Rendered dynamically by b.indo.js -->
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL VIEWER FOR ASSIGNMENTS -->
+  <div id="assignmentModal"
+    class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div
+      class="bg-white dark:bg-zinc-900 border border-pink-200/80 dark:border-pink-900/50 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in">
+
+      <!-- Modal Header -->
+      <div class="px-6 py-5 border-b border-pink-100 dark:border-zinc-800 flex items-start justify-between gap-4">
+        <div>
+          <h3 id="modalTitle" class="text-xl font-bold text-zinc-900 dark:text-white">Judul Tugas</h3>
+          <div id="modalMeta" class="flex flex-wrap items-center gap-3 mt-2">
+            <!-- Dynamic Metadata Pills -->
+          </div>
+        </div>
+        <button id="closeModalBtn"
+          class="p-2 rounded-xl bg-pink-50 dark:bg-zinc-800 text-pink-600 dark:text-pink-300 hover:bg-pink-100 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div id="modalBody" class="p-6 overflow-y-auto flex-1 text-sm text-zinc-750 dark:text-zinc-300">
+        <!-- Dynamic Content -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div
+        class="px-6 py-4 border-t border-pink-100 dark:border-zinc-800 bg-pink-50/50 dark:bg-zinc-955 flex items-center justify-between text-xs text-zinc-500">
+        <span>Arsip Jurnal & Sastra Alika • Kelas XI</span>
+        <button onclick="document.getElementById('assignmentModal').classList.add('hidden')"
+          class="px-4 py-2 rounded-xl bg-pink-500 text-white dark:bg-pink-600 font-semibold shadow-md hover:bg-pink-600 transition-colors">Tutup</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer
+    class="border-t border-pink-100 dark:border-pink-950 bg-white/70 dark:bg-zinc-950 mt-auto transition-colors duration-300 relative z-10">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+
+      <div class="flex items-center gap-3">
+        <div
+          class="w-8 h-8 rounded-lg bg-gradient-to-tr from-pink-500 to-rose-400 text-white font-bold flex items-center justify-center text-sm shadow-md">
+          A
+        </div>
+        <span class="text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+          &copy; 2026 Alika Lotus Apriyanto | SMA cinta kasih tzu chi.
+        </span>
+      </div>
+
+      <div class="flex items-center gap-6 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+        <a href="index.html#dashboard" class="hover:text-pink-600 dark:hover:text-pink-400">Dashboard</a>
+        <a href="index.html#profil" class="hover:text-pink-600 dark:hover:text-pink-400">Profil</a>
+        <a href="informatika.html" class="hover:text-pink-600 dark:hover:text-pink-400">Informatika</a>
+        <a href="b.indo.html" class="hover:text-pink-650 dark:hover:text-pink-400 text-pink-500">Bahasa Indonesia</a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/persistent-player.js"></script>
+  <script src="assets/js/spa-router.js"></script>
+  <script src="assets/js/orbit-progress.js"></script>
+  <script src="assets/js/b.indo.js"></script>
+</body>
+
+</html>
